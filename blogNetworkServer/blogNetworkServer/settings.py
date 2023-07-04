@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blogNetworkServer.users',
+    'blogNetworkServer.blogs',
+    'blogNetworkServer.posts',
     'rest_framework',
     'rest_framework_simplejwt'
 ]
