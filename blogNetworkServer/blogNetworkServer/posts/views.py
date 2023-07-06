@@ -51,3 +51,20 @@ class PublishPostAPIView(APIView):
         _serializer = _PostSerializer(instance=cur_post)
         return Response(_serializer.data, status=status.HTTP_202_ACCEPTED)
 
+
+class LikePostAPIView(APIView):
+    def post(self, request, post):
+        cur_post = Post.objects.get(id=post)
+        cur_post.likes += 1
+        cur_post.save()
+        _serializer = _PostSerializer(instance=cur_post)
+        return Response(_serializer.data, status=status.HTTP_202_ACCEPTED)
+
+
+class ViewPostAPIView(APIView):
+    def post(self, request, post):
+        cur_post = Post.objects.get(id=post)
+        cur_post.views += 1
+        cur_post.save()
+        _serializer = _PostSerializer(instance=cur_post)
+        return Response(_serializer.data, status=status.HTTP_202_ACCEPTED)

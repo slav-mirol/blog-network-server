@@ -13,3 +13,8 @@ class Blog(models.Model):
 class Authors(models.Model):
     id_blog = models.ForeignKey(to=Blog, on_delete=models.CASCADE, related_name='user2blog')
     id_user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='blog2user')
+
+
+class Subscriptions(models.Model):
+    id_user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    subscribe_blog = models.ForeignKey(to=Blog, on_delete=models.CASCADE)
