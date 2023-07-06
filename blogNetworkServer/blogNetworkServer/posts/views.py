@@ -98,10 +98,16 @@ class GetLastPostsApiView(APIView):
 class GetLastPostsOfBlogApiView(APIView):
     def get(self, request, blog, num=5):
         posts = Post.objects.filter(is_published=True, id_blog=blog).order_by('created_at')[::-1]
-        print(posts)
         if num >= len(posts):
             serializer = _PostSerializer(instance=posts, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             serializer = _PostSerializer(instance=posts[:num], many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetPostsOfUserApiView(APIView):
+    def get(self, request, user):
+        posts = Post.objects.filter(is_published=True, author=user).order_by('created_at')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
