@@ -3,7 +3,6 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    date_joined = serializers.ReadOnlyField()
 
     class Meta(object):
         model = User

@@ -7,9 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.utils import jwt_payload_handler
 
-from blogNetworkServer.blogNetworkServer.settings import SECRET_KEY
-from models import User
-from serializers import UserSerializer
+from ..settings import SECRET_KEY
+from .models import User
+from .serializers import UserSerializer
 
 
 class CreateUserAPIView(APIView):
