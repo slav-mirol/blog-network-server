@@ -4,8 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PostSerializer, PostTagSerializer, _PostSerializer
-from ..users.models import User
+from .serializers import PostSerializer, PostTagSerializer, _PostSerializer, CommentSerializer
 from .models import Post
 from ..blogs.models import Blog, Authors
 
@@ -68,3 +67,18 @@ class ViewPostAPIView(APIView):
         cur_post.save()
         _serializer = _PostSerializer(instance=cur_post)
         return Response(_serializer.data, status=status.HTTP_202_ACCEPTED)
+
+
+class CreateCommentApiView(APIView):
+    def post(self, request):
+        comment = request.data
+        data = {
+            "author": comment['author'],
+            "body": comment['body'],
+            "created_at" : timezone.now(),
+            "id_post": comment['id_post'],
+        }
+        serializer = CommentSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
