@@ -38,3 +38,20 @@ class CreateBlogAPIView(APIView):
             return Response(res, status=status.HTTP_400_BAD_REQUEST)
 
 
+class AddAuthorToBlog(APIView):
+    def post(self, request, blog, user):
+        try:
+            cur_user = User.objects.get(id=user)
+            cur_blog = Blog.objects.get(id=blog)
+            _serializer = AuthorsSerializer(data={
+                'id_blog': blog,
+                'id_user': user
+            })
+            _serializer.is_valid(raise_exception=True)
+            _serializer.save()
+            return Response(_serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            res = {"error": "not found user " + str(user) + " or blog " + str(blog)}
+            return Response(res, status=status.HTTP_400_BAD_REQUEST)
+
+
