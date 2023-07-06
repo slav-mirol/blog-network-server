@@ -6,7 +6,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=1000)
     description = models.TextField()
     created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(null=True)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
 
