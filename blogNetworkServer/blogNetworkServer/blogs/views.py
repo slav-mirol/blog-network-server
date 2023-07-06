@@ -44,7 +44,8 @@ class AddAuthorToBlog(APIView):
             cur_user = User.objects.get(id=user)
             cur_owner = User.objects.get(id=owner)
             cur_blog = Blog.objects.get(id=blog)
-            if owner == cur_blog.owner:
+            print(owner, cur_blog.owner)
+            if owner == cur_blog.owner.id:
                 _serializer = AuthorsSerializer(data={
                     'id_blog': blog,
                     'id_user': user

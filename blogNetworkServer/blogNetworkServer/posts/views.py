@@ -75,10 +75,21 @@ class CreateCommentApiView(APIView):
         data = {
             "author": comment['author'],
             "body": comment['body'],
-            "created_at" : timezone.now(),
+            "created_at": timezone.now(),
             "id_post": comment['id_post'],
         }
         serializer = CommentSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class GetLastPostsApiView(APIView):
+    def get(self, request, num=5):
+        posts = Post.objects.order_by('created_at')[::-1]
+        if num >= len(posts):
+            serializer = _PostSerializer(instance=posts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            serializer = _PostSerializer(instance=posts[:num], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)

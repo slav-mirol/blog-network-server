@@ -20,10 +20,12 @@ from django.urls import path, include
 from .users.urls import urlpatterns as users_urls
 from .blogs.urls import urlpatterns as blogs_urls
 from .posts.urls import urlpatterns as posts_urls
+from .posts.views import GetLastPostsApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include(users_urls)),
     path('blog/', include(blogs_urls)),
     path('post/', include(posts_urls)),
+    path('main/<int:num>', GetLastPostsApiView.as_view()),
 ]
