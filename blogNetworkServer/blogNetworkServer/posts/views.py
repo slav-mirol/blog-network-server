@@ -4,11 +4,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PostSerializer, PostTagSerializer
+from .serializers import PostSerializer, PostTagSerializer, _PostSerializer
 from ..users.models import User
 from .models import Post
 from ..blogs.models import Blog, Authors
-from ..blogs.serializers import _AuthorsSerializer
 
 
 class CreatePostAPIView(APIView):
@@ -40,12 +39,15 @@ class CreatePostAPIView(APIView):
             return Response(res, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PublishPost(APIView):
+class PublishPostAPIView(APIView):
     def post(self, request, post):
         cur_post = Post.objects.get(id=post)
         cur_post.is_published = True
         cur_post.created_at = timezone.now()
         cur_post.save()
-        blog = Blog.objects.get(id=cur_post.id_blog)
+        blog = Blog.objects.get(id=cur_post.id_blog.id)
         blog.updated_at = timezone.now()
         blog.save()
+        _serializer = _PostSerializer(instance=cur_post)
+        return Response(_serializer.data, status=status.HTTP_202_ACCEPTED)
+
