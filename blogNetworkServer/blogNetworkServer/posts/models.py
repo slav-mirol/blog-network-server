@@ -11,6 +11,19 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
 
-#class PostComment(models.Model):
-#    id_post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='user2blog')
-#    id_comment = models.ForeignKey(to=Comment, on_delete=models.CASCADE, related_name='blog2user')
+
+class Comment(models.Model):
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    body = models.TextField()
+    created_at = models.DateTimeField()
+    id_post = models.ForeignKey(to=Post, on_delete=models.CASCADE, default=0)
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=1000)
+    description = models.TextField()
+
+
+class PostTag(models.Model):
+    id_tag = models.ForeignKey(to=Tag, on_delete=models.CASCADE, related_name='tag2post')
+    id_post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='post2tag')
