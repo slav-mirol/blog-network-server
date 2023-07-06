@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import BlogSerializer, AuthorsSerializer
+from .serializers import BlogSerializer, AuthorsSerializer, _BlogSerializer
 from .models import Blog
 from ..users.models import User
 
@@ -60,4 +60,14 @@ class AddAuthorToBlog(APIView):
             res = {"error": "not found user " + str(user) + "/" + str(owner) + " or blog " + str(blog)}
             return Response(res, status=status.HTTP_400_BAD_REQUEST)
 
+
+class GetLastBlogsApiView(APIView):
+    def get(self, request, num=5):
+        blogs = Blog.objects.order_by('updated_at')[::-1]
+        if num >= len(blogs):
+            serializer = _BlogSerializer(instance=blogs, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            serializer = _BlogSerializer(instance=blogs[:num], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
