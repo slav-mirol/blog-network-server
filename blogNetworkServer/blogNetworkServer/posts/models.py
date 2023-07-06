@@ -1,5 +1,6 @@
 from django.db import models
 from ..users.models import User
+from ..blogs.models import Blog
 
 
 class Post(models.Model):
@@ -7,9 +8,10 @@ class Post(models.Model):
     title = models.CharField(max_length=1000)
     body = models.TextField()
     is_published = models.CharField(default=False)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(null=True)
     likes = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
+    id_blog = models.ForeignKey(to=Blog, on_delete=models.CASCADE, default=0)
 
 
 class Comment(models.Model):
