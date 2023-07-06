@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import BlogSerializer
+from .serializers import BlogSerializer, AuthorsSerializer
+from .models import Blog
 from ..users.models import User
 
 
@@ -24,6 +25,13 @@ class CreateBlogAPIView(APIView):
             serializer = BlogSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            id_blog = Blog.objects.last().id
+            _serializer = AuthorsSerializer(data={
+                'id_blog': id_blog,
+                'id_user': blog['owner']
+            })
+            _serializer.is_valid(raise_exception=True)
+            _serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             res = {"error": "not found user {}".format(blog['owner'])}
