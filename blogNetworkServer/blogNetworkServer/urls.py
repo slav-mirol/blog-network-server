@@ -20,7 +20,7 @@ from django.urls import path, include
 from .users.urls import urlpatterns as users_urls
 from .blogs.urls import urlpatterns as blogs_urls
 from .posts.urls import urlpatterns as posts_urls
-from .posts.views import GetLastPostsApiView
+from .posts.views import GetLastPostsApiView, GetLastPostsOfBlogApiView
 from .blogs.views import GetLastBlogsApiView
 
 urlpatterns = [
@@ -30,4 +30,5 @@ urlpatterns = [
     path('post/', include(posts_urls)),
     path('lastNposts/<int:num>', GetLastPostsApiView.as_view()),
     path('lastNblogs/<int:num>', GetLastBlogsApiView.as_view()),
+    path('lastNpostsOfBlog/<int:blog>/<int:num>', GetLastPostsOfBlogApiView.as_view()),
 ]

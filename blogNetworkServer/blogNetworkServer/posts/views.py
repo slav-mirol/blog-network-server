@@ -86,7 +86,19 @@ class CreateCommentApiView(APIView):
 
 class GetLastPostsApiView(APIView):
     def get(self, request, num=5):
-        posts = Post.objects.order_by('created_at')[::-1]
+        posts = Post.objects.filter(is_published=True).order_by('created_at')[::-1]
+        if num >= len(posts):
+            serializer = _PostSerializer(instance=posts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            serializer = _PostSerializer(instance=posts[:num], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetLastPostsOfBlogApiView(APIView):
+    def get(self, request, blog, num=5):
+        posts = Post.objects.filter(is_published=True, id_blog=blog).order_by('created_at')[::-1]
+        print(posts)
         if num >= len(posts):
             serializer = _PostSerializer(instance=posts, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
