@@ -39,7 +39,7 @@ class CreatePostAPIView(APIView):
 
 
 class PublishPostAPIView(APIView):
-    def post(self, request, post):
+    def put(self, request, post):
         cur_post = Post.objects.get(id=post)
         cur_post.is_published = True
         cur_post.created_at = timezone.now()
@@ -52,7 +52,7 @@ class PublishPostAPIView(APIView):
 
 
 class LikePostAPIView(APIView):
-    def post(self, request, post):
+    def put(self, request, post):
         cur_post = Post.objects.get(id=post)
         cur_post.likes += 1
         cur_post.save()
@@ -61,7 +61,7 @@ class LikePostAPIView(APIView):
 
 
 class ViewPostAPIView(APIView):
-    def post(self, request, post):
+    def put(self, request, post):
         cur_post = Post.objects.get(id=post)
         cur_post.views += 1
         cur_post.save()

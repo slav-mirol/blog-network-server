@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Blog, Authors
+from .models import Blog, Authors, Subscriptions
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -11,7 +11,13 @@ class BlogSerializer(serializers.ModelSerializer):
 class AuthorsSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Authors
-        fields = ('id_blog', 'id_user')
+        fields = ('id_user', 'subscribe_blog')
+
+
+class SubscriptionsSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        model = Subscriptions
+        fields = ('id_user', 'subscribe_blog')
 
 
 class _AuthorsSerializer(serializers.Serializer):
