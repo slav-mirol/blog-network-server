@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import BlogSerializer, AuthorsSerializer, _BlogSerializer, SubscriptionsSerializer
-from .models import Blog, Subscriptions
+from .models import Blog, Subscriptions, Authors
 from ..users.models import User
 
 
@@ -103,5 +103,21 @@ class GetSubscibeOfUserApiView(APIView):
 class FindBlogByTitleApiView(APIView):
     def get(self, request, query):
         blogs = Blog.objects.filter(title__icontains=query.lower()).order_by('updated_at')[::-1]
+        serializer = _BlogSerializer(instance=blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FindBlogByAuthorsApiView(APIView):
+    def get(self, request, query):
+        query = query.split('-')
+        users = User.objects.filter(username__in=query)
+        ids = []
+        for i in users:
+            ids.append(i.id)
+        authors = Authors.objects.filter(id_user__in=ids)
+        ids = []
+        for i in authors:
+            ids.append(i.id_blog.id)
+        blogs = Blog.objects.filter(id__in=ids).order_by('updated_at')[::-1]
         serializer = _BlogSerializer(instance=blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
