@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import PostSerializer, PostTagSerializer, _PostSerializer, CommentSerializer
-from .models import Post
+from .models import Post, Tag, PostTag
 from ..blogs.models import Blog, Authors
 from ..users.models import User
 
@@ -128,5 +128,25 @@ class GetPostsByUsernameApiView(APIView):
 class FindPostsByTitleApiView(APIView):
     def get(self, request, query):
         posts = Post.objects.filter(title__icontains=query.lower()).order_by('created_at')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FindPostsByTagsApiView(APIView):
+
+    def get(self, request, query):
+        query = query.split('-')
+        for i in range(len(query)):
+            query[i] = query[i].lower()
+            query[i] = query[i].replace(query[i][0], query[i][0].upper(), 1)
+        tags = Tag.objects.filter(title__in=query)
+        ids = []
+        for i in tags:
+            ids.append(i.id)
+        postsTag = PostTag.objects.filter(id_tag__in=ids)
+        ids = []
+        for i in postsTag:
+            ids.append(i.id_post.id)
+        posts = Post.objects.filter(id__in=ids).order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -109,7 +109,7 @@ class FindBlogByTitleApiView(APIView):
 
 class FindBlogByAuthorsApiView(APIView):
     def get(self, request, query):
-        query = query.split('-')
+        query = list(map(lambda x: x.lower(), query.split('-')))
         users = User.objects.filter(username__in=query)
         ids = []
         for i in users:
