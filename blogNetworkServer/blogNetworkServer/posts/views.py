@@ -123,3 +123,10 @@ class GetPostsByUsernameApiView(APIView):
         posts = Post.objects.filter(is_published=True, author__in=ids).order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FindPostsByTitleApiView(APIView):
+    def get(self, request, query):
+        posts = Post.objects.filter(title__icontains=query.lower()).order_by('created_at')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

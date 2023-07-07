@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .views import CreatePostAPIView, PublishPostAPIView, LikePostAPIView, \
-    ViewPostAPIView, CreateCommentApiView, GetPostsByUsernameApiView
+    ViewPostAPIView, CreateCommentApiView, GetPostsByUsernameApiView, \
+    FindPostsByTitleApiView
 
 urlpatterns = [
     path('create', CreatePostAPIView.as_view()),
@@ -10,4 +11,5 @@ urlpatterns = [
     path('view/<int:post>', ViewPostAPIView.as_view()),
     path('createComment', CreateCommentApiView.as_view()),
     path('findByAuthor/<str:username>', GetPostsByUsernameApiView.as_view()),
+    path('findByTitle/<str:query>', FindPostsByTitleApiView.as_view()),
 ]
