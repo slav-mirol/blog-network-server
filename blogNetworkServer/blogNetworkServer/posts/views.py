@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from .serializers import PostSerializer, PostTagSerializer, _PostSerializer, CommentSerializer
 from .models import Post
 from ..blogs.models import Blog, Authors
+from ..users.models import User
 
 
 class CreatePostAPIView(APIView):
@@ -109,5 +110,16 @@ class GetLastPostsOfBlogApiView(APIView):
 class GetPostsOfUserApiView(APIView):
     def get(self, request, user):
         posts = Post.objects.filter(is_published=True, author=user).order_by('created_at')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetPostsByUsernameApiView(APIView):
+    def get(self, request, username):
+        user = User.objects.filter(username__icontains=username)
+        ids = []
+        for i in user:
+            ids.append(i.id)
+        posts = Post.objects.filter(is_published=True, author__in=ids).order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

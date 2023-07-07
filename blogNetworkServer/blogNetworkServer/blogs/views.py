@@ -102,6 +102,6 @@ class GetSubscibeOfUserApiView(APIView):
 
 class FindBlogByTitleApiView(APIView):
     def get(self, request, query):
-        blogs = Blog.objects.filter(title__icontains=query.lower())
+        blogs = Blog.objects.filter(title__icontains=query.lower()).order_by('updated_at')[::-1]
         serializer = _BlogSerializer(instance=blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
