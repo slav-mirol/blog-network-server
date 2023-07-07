@@ -121,3 +121,31 @@ class FindBlogByAuthorsApiView(APIView):
         blogs = Blog.objects.filter(id__in=ids).order_by('updated_at')[::-1]
         serializer = _BlogSerializer(instance=blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortBlogsByTitleAPIView(APIView):
+    def get(self, request):
+        blogs = Blog.objects.all().order_by('title')
+        serializer = _BlogSerializer(instance=blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ReverceSortBlogsByTitleAPIView(APIView):
+    def get(self, request):
+        blogs = Blog.objects.all().order_by('title')[::-1]
+        serializer = _BlogSerializer(instance=blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortBlogsByTimeAPIView(APIView):
+    def get(self, request):
+        blogs = Blog.objects.all().order_by('updated_at')
+        serializer = _BlogSerializer(instance=blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ReverceSortBlogsByTimeAPIView(APIView):
+    def get(self, request):
+        blogs = Blog.objects.all().order_by('updated_at')[::-1]
+        serializer = _BlogSerializer(instance=blogs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

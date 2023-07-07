@@ -127,13 +127,12 @@ class GetPostsByUsernameApiView(APIView):
 
 class FindPostsByTitleApiView(APIView):
     def get(self, request, query):
-        posts = Post.objects.filter(title__icontains=query.lower()).order_by('created_at')[::-1]
+        posts = Post.objects.filter(title__icontains=query.lower(), is_published=True).order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FindPostsByTagsApiView(APIView):
-
     def get(self, request, query):
         query = query.split('-')
         for i in range(len(query)):
@@ -147,6 +146,34 @@ class FindPostsByTagsApiView(APIView):
         ids = []
         for i in postsTag:
             ids.append(i.id_post.id)
-        posts = Post.objects.filter(id__in=ids).order_by('created_at')[::-1]
+        posts = Post.objects.filter(id__in=ids, is_published=True).order_by('created_at')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortPostsByTitleAPIView(APIView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('title')
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ReverceSortPostsByTitleAPIView(APIView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('title')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortPostsByTimeAPIView(APIView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('created_at')
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ReverceSortPostsByTimeAPIView(APIView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
