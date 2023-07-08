@@ -2,8 +2,9 @@ from django.urls import path
 
 from .views import CreatePostAPIView, PublishPostAPIView, LikePostAPIView, \
     ViewPostAPIView, CreateCommentApiView, GetPostsByUsernameApiView, \
-    FindPostsByTitleApiView, FindPostsByTagsApiView, SortPostsByTitleAPIView,\
-    SortPostsByTimeAPIView, ReverceSortPostsByTimeAPIView, ReverceSortPostsByTitleAPIView
+    FindPostsByTitleApiView, FindPostsByTagsApiView, SortPostsByTitleAPIView, \
+    SortPostsByTimeAPIView, ReverceSortPostsByTimeAPIView, ReverceSortPostsByTitleAPIView,\
+    SortPostsByLikesAPIView, SortPostsByDateAPIView
 
 urlpatterns = [
     path('create', CreatePostAPIView.as_view()),
@@ -18,4 +19,6 @@ urlpatterns = [
     path('reverceSortByTitle', ReverceSortPostsByTitleAPIView.as_view()),
     path('sortByTime', SortPostsByTimeAPIView.as_view()),
     path('reverceSortByTime', ReverceSortPostsByTimeAPIView.as_view()),
+    path('sortByLikes', SortPostsByLikesAPIView.as_view()),
+    path('sortByDate/<str:data>/<str:otdo>', SortPostsByDateAPIView.as_view())
 ]

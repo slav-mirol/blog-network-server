@@ -1,3 +1,5 @@
+import datetime
+
 from django.utils import timezone
 
 from rest_framework import status
@@ -177,3 +179,31 @@ class ReverceSortPostsByTimeAPIView(APIView):
         posts = Post.objects.all().order_by('created_at')[::-1]
         serializer = _PostSerializer(instance=posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortPostsByLikesAPIView(APIView):
+    def get(self, request):
+        posts = Post.objects.all().order_by('likes')[::-1]
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SortPostsByDateAPIView(APIView):
+    def get(self, request, data, otdo):
+        data = data.split(':')
+        dates = []
+        for i in data:
+            dates.append(datetime.datetime.strptime(i, '%Y-%m-%d'))
+        if len(data) == 1:
+            if otdo == 'from':
+                posts = Post.objects.filter(created_at__gte=data[0]).order_by('created_at')[::-1]
+                serializer = _PostSerializer(instance=posts, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            elif otdo == 'before':
+                posts = Post.objects.filter(created_at__lte=data[0]).order_by('created_at')[::-1]
+                serializer = _PostSerializer(instance=posts, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        elif len(data) == 2 and otdo == 'fb':
+            posts = Post.objects.filter(created_at__gte=data[0]) & Post.objects.filter(created_at__lte=data[1])
+            serializer = _PostSerializer(instance=posts.order_by('created_at')[::-1], many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
