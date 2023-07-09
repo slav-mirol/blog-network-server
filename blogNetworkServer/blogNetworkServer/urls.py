@@ -15,8 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+from .users.urls import urlpatterns as users_urls
+from .blogs.urls import urlpatterns as blogs_urls
+from .posts.urls import urlpatterns as posts_urls
+from .posts.views import GetLastPostsApiView, GetLastPostsOfBlogApiView, GetPostsOfUserApiView
+from .blogs.views import GetLastBlogsApiView, GetSubscibeOfUserApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('user/', include(users_urls)),
+    path('blog/', include(blogs_urls)),
+    path('post/', include(posts_urls)),
+    path('lastNposts/<int:num>', GetLastPostsApiView.as_view()),
+    path('lastNblogs/<int:num>', GetLastBlogsApiView.as_view()),
+    path('lastNpostsOfBlog/<int:blog>/<int:num>', GetLastPostsOfBlogApiView.as_view()),
+    path('myPosts/<int:user>', GetPostsOfUserApiView.as_view()),
+    path('mySubscibes/<int:user>', GetSubscibeOfUserApiView.as_view())
 ]
