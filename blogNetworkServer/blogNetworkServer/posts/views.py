@@ -252,7 +252,7 @@ class UpdateComment(APIView):
         Comment.objects.filter(id=comment['id']).update(
             author=comment['author'],
             body=comment['body'],
-            created_at=comment['created_at']
+            created_at=datetime.datetime.strptime(comment['created_at'], '%Y-%m-%d')
         )
         cur_comm = Comment.objects.get(id=comment['id'])
         serializer = _CommentSerializer(instance=cur_comm)
@@ -266,11 +266,11 @@ class UpdatePost(APIView):
             title=post['title'],
             body=post['body'],
             is_published=post['is_published'],
-            created_at=post['created_at'],
+            created_at=datetime.datetime.strptime(post['created_at'], '%Y-%m-%d'),
             likes=post['likes'],
             views=post['views'],
-            id_author=post['id_author']
+            author=post['author']
         )
-        cur_post = Comment.objects.get(id=post['id'])
-        serializer = _CommentSerializer(instance=cur_post)
+        cur_post = Post.objects.get(id=post['id'])
+        serializer = _PostSerializer(instance=cur_post)
         return Response(serializer.data, status=status.HTTP_200_OK)

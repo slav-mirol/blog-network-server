@@ -5,7 +5,7 @@ from .views import CreatePostAPIView, PublishPostAPIView, LikePostAPIView, \
     FindPostsByTitleApiView, FindPostsByTagsApiView, SortPostsByTitleAPIView, \
     SortPostsByTimeAPIView, ReverceSortPostsByTimeAPIView, ReverceSortPostsByTitleAPIView,\
     SortPostsByLikesAPIView, SortPostsByDateAPIView, DeletePost, DeleteTag, DeleteComment, \
-    UpdateTag, UpdateComment
+    UpdateTag, UpdateComment, UpdatePost
 
 urlpatterns = [
     path('create', CreatePostAPIView.as_view()),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('deleteTag/<int:num>', DeleteTag.as_view()),
     path('updateTag', UpdateTag.as_view()),
     path('updateComment', UpdateComment.as_view()),
+    path('update', UpdatePost.as_view())
 ]

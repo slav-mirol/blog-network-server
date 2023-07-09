@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.utils import timezone
 
 from rest_framework import status
@@ -166,8 +168,8 @@ class UpdateBlog(APIView):
         Blog.objects.filter(id=blog['id']).update(
             title=blog['title'],
             description=blog['description'],
-            created_at=blog['created_at'],
-            updated_at=blog['updated_at'],
+            created_at=datetime.strptime(blog['created_at'], '%Y-%m-%d'),
+            updated_at=datetime.strptime(blog['updated_at'], '%Y-%m-%d'),
             owner=blog['owner']
         )
         cur_blog = Blog.objects.get(id=blog['id'])
