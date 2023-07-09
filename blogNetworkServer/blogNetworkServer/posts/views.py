@@ -274,3 +274,11 @@ class UpdatePost(APIView):
         cur_post = Post.objects.get(id=post['id'])
         serializer = _PostSerializer(instance=cur_post)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RelevationSortPost(APIView):
+    def get(self, request):
+        posts = sorted(list(Post.objects.all()), key=lambda x: x.likes + x.views / 2, reverse=True)
+        print(posts)
+        serializer = _PostSerializer(instance=posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
