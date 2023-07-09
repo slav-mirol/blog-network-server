@@ -4,7 +4,8 @@ from .views import CreatePostAPIView, PublishPostAPIView, LikePostAPIView, \
     ViewPostAPIView, CreateCommentApiView, GetPostsByUsernameApiView, \
     FindPostsByTitleApiView, FindPostsByTagsApiView, SortPostsByTitleAPIView, \
     SortPostsByTimeAPIView, ReverceSortPostsByTimeAPIView, ReverceSortPostsByTitleAPIView,\
-    SortPostsByLikesAPIView, SortPostsByDateAPIView
+    SortPostsByLikesAPIView, SortPostsByDateAPIView, DeletePost, DeleteTag, DeleteComment, \
+    UpdateTag, UpdateComment
 
 urlpatterns = [
     path('create', CreatePostAPIView.as_view()),
@@ -20,5 +21,10 @@ urlpatterns = [
     path('sortByTime', SortPostsByTimeAPIView.as_view()),
     path('reverceSortByTime', ReverceSortPostsByTimeAPIView.as_view()),
     path('sortByLikes', SortPostsByLikesAPIView.as_view()),
-    path('sortByDate/<str:data>/<str:otdo>', SortPostsByDateAPIView.as_view())
+    path('sortByDate/<str:data>/<str:otdo>', SortPostsByDateAPIView.as_view()),
+    path('deletePost/<int:num>', DeletePost.as_view()),
+    path('deleteComment/<int:num>', DeleteComment.as_view()),
+    path('deleteTag/<int:num>', DeleteTag.as_view()),
+    path('updateTag', UpdateTag.as_view()),
+    path('updateComment', UpdateComment.as_view()),
 ]

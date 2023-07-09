@@ -6,8 +6,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PostSerializer, PostTagSerializer, _PostSerializer, CommentSerializer
-from .models import Post, Tag, PostTag
+from .serializers import PostSerializer, PostTagSerializer, _PostSerializer, CommentSerializer, \
+    _TagSerializer, _CommentSerializer
+from .models import Post, Tag, PostTag, Comment
 from ..blogs.models import Blog, Authors
 from ..users.models import User
 
@@ -207,3 +208,69 @@ class SortPostsByDateAPIView(APIView):
             posts = Post.objects.filter(created_at__gte=data[0]) & Post.objects.filter(created_at__lte=data[1])
             serializer = _PostSerializer(instance=posts.order_by('created_at')[::-1], many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DeletePost(APIView):
+    def post(self, request, num):
+        post = Post.objects.get(id=num).delete()
+        res = {
+            'answer': "post " + str(num) + " has been deleted"
+        }
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class DeleteComment(APIView):
+    def post(self, request, num):
+        comment = Comment.objects.get(id=num).delete()
+        res = {
+            'answer': "comment " + str(num) + " has been deleted"
+        }
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class DeleteTag(APIView):
+    def post(self, request, num):
+        tag = Tag.objects.get(id=num).delete()
+        res = {
+            'answer': "tag " + str(num) + " has been deleted"
+        }
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class UpdateTag(APIView):
+    def post(self, request):
+        tag = request.data
+        Tag.objects.filter(id=tag['id']).update(title=tag['title'], description=tag['description'])
+        cur_tag = Tag.objects.get(id=tag['id'])
+        serializer = _TagSerializer(instance=cur_tag)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateComment(APIView):
+    def post(self, request):
+        comment = request.data
+        Comment.objects.filter(id=comment['id']).update(
+            author=comment['author'],
+            body=comment['body'],
+            created_at=comment['created_at']
+        )
+        cur_comm = Comment.objects.get(id=comment['id'])
+        serializer = _CommentSerializer(instance=cur_comm)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdatePost(APIView):
+    def post(self, request):
+        post = request.data
+        Post.objects.filter(id=post['id']).update(
+            title=post['title'],
+            body=post['body'],
+            is_published=post['is_published'],
+            created_at=post['created_at'],
+            likes=post['likes'],
+            views=post['views'],
+            id_author=post['id_author']
+        )
+        cur_post = Comment.objects.get(id=post['id'])
+        serializer = _CommentSerializer(instance=cur_post)
+        return Response(serializer.data, status=status.HTTP_200_OK)

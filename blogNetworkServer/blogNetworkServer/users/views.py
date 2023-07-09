@@ -37,9 +37,9 @@ def authenticate_user(request):
                 user_details = {}
                 user_info = {}
                 user_details['token'] = token
-                user_info['id'] = "%s" % (user.id)
-                user_info['username'] = "%s" % (user.username)
-                user_info['is_admin'] = "%s" % (user.is_admin)
+                user_info['id'] = "%s" % user.id
+                user_info['username'] = "%s" % user.username
+                user_info['is_admin'] = "%s" % user.is_admin
                 user_details['user_info'] = user_info
                 user_logged_in.send(sender=user.__class__, request=request, user=user)
                 return Response(user_details, status=status.HTTP_200_OK)
@@ -55,3 +55,29 @@ def authenticate_user(request):
             'error': 'please provide a email and a password'
         }
         return Response(res)
+
+
+class DeleteUser(APIView):
+    def post(self, request, num):
+        user = User.objects.get(id=num).delete()
+        res = {
+            'answer': "user " + str(num) + " has been deleted"
+        }
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class UpdateUser(APIView):
+    def post(self, request):
+        user = request.data
+        User.objects.filter(id=user['id']).update(
+            username=user['username'],
+            is_superuser=user['is_superuser'],
+            is_admin=user['is_admin'],
+        )
+        cur_user = User.objects.get(id=user['id'])
+        user_info = {
+            'id': "%s" % cur_user.id,
+            'username': "%s" % cur_user.username,
+            'is_admin': "%s" % cur_user.is_admin
+        }
+        return Response(user_info, status=status.HTTP_200_OK)

@@ -150,3 +150,26 @@ class ReverceSortBlogsByTimeAPIView(APIView):
         serializer = _BlogSerializer(instance=blogs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class DeleteBlog(APIView):
+    def post(self, request, num):
+        blog = Blog.objects.get(id=num).delete()
+        res = {
+            'answer': "blog " + str(num) + " has been deleted"
+        }
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class UpdateBlog(APIView):
+    def post(self, request):
+        blog = request.data
+        Blog.objects.filter(id=blog['id']).update(
+            title=blog['title'],
+            description=blog['description'],
+            created_at=blog['created_at'],
+            updated_at=blog['updated_at'],
+            owner=blog['owner']
+        )
+        cur_blog = Blog.objects.get(id=blog['id'])
+        serializer = _BlogSerializer(instance=cur_blog)
+        return Response(serializer.data, status=status.HTTP_200_OK)

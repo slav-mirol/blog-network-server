@@ -27,3 +27,13 @@ class _PostSerializer(serializers.Serializer):
     created_at = serializers.CharField()
     views = serializers.CharField()
     likes = serializers.CharField()
+
+class _CommentSerializer(serializers.ModelSerializer):
+    author = serializers.CharField()
+    body = serializers.CharField()
+    created_at = serializers.CharField()
+    id_post = serializers.CharField()
+
+class _TagSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
+    description = serializers.CharField()

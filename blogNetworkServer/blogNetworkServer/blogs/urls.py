@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import CreateBlogAPIView, AddAuthorToBlog, SubscribeToBlogApiView, FindBlogByTitleApiView, \
     FindBlogByAuthorsApiView, SortBlogsByTitleAPIView, ReverceSortBlogsByTitleAPIView, SortBlogsByTimeAPIView,\
-    ReverceSortBlogsByTimeAPIView
+    ReverceSortBlogsByTimeAPIView, DeleteBlog, UpdateBlog
 
 urlpatterns = [
     path('create', CreateBlogAPIView.as_view()),
@@ -13,5 +13,6 @@ urlpatterns = [
     path('reverceSortByTitle', ReverceSortBlogsByTitleAPIView.as_view()),
     path('sortByTime', SortBlogsByTimeAPIView.as_view()),
     path('reverceSortByTime', ReverceSortBlogsByTimeAPIView.as_view()),
-
+    path('delete/<int:num>', DeleteBlog.as_view()),
+    path('update', UpdateBlog.as_view())
 ]
