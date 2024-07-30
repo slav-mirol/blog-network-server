@@ -15,4 +15,4 @@
 2. скачать данный репозиторий
 3. создать конфигурацию запуска сервера с хостом localhost и портом 8001
 
-Ознакомиться с реализованными "ручками" можно по [ссылке](https://app.getpostman.com/join-team?invite_code=611a296c25bceaca0860ffbf83560cfb&target_code=586625aff7e5d9422dec8b77d55474e5](https://app.getpostman.com/join-team?invite_code=20ce7171f1c23fb5922055acffde1a40&target_code=e450bd5091816c224eb14b16eba581fc)
+Ознакомиться с реализованными "ручками" можно по [ссылке](https://app.getpostman.com/join-team?invite_code=20ce7171f1c23fb5922055acffde1a40&target_code=e450bd5091816c224eb14b16eba581fc)
